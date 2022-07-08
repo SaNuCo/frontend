@@ -1,9 +1,5 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+  <router-view/>
 </template>
 
 <script lang="ts">
@@ -20,7 +16,7 @@ export default defineComponent({
 })
 </script>
 <style>
-html {
-    overflow-y: hidden;
+html,body {
+  overflow-y: hidden !important;
 }
 </style>

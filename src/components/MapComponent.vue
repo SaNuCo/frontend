@@ -11,7 +11,7 @@ import { Map } from "maplibre-gl";
 import { Component } from "@vue/runtime-core";
 
 @Options({})
-export default class MapControl extends Vue {
+export default class MapComponent extends Vue {
     declare $refs: {
         mapContainer: any
     }
@@ -19,12 +19,14 @@ export default class MapControl extends Vue {
     private map!: Map;
 
     mounted() {
-        console.log(this.$refs.mapContainer)
         this.map = new Map({
             container: this.$refs.mapContainer,
             style: "/map/light/style.json",
-            center: [-74.5, 40],
+            center: [9.174886529310387, 48.772661078848294],
             zoom: 9,
+            transformRequest: (url: string) => ({
+                url: new URL(url, document.baseURI).toString()
+            })
         });
     }
 }

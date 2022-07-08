@@ -1,15 +1,15 @@
 <template>
-    <map-control />
+    <map-component />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import MapControl from "@/components/MapControl.vue";
+import MapComponent from "@/components/MapComponent.vue";
 
 @Options({
     components: {
-        MapControl,
+        MapComponent: MapComponent,
     },
 })
 export default class MapView extends Vue {}

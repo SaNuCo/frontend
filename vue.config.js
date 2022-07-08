@@ -12,6 +12,9 @@ module.exports = defineConfig({
       "^/tiles": {
         target: "http://localhost:8090"
       },
+      "^/data": {
+        target: "http://localhost:8080"
+      },
       "^fonts": {
         target: "http://localhost:8080"
       }
