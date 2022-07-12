@@ -5,7 +5,7 @@
     "openmaptiles": {
       "type": "vector",
       "tiles": [
-        "/data/v3/{z}/{x}/{y}.pbf"
+        "/tiles/{z}/{x}/{y}.pbf"
       ]
     }
   },

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <marker-component :contentWidth="400" :contentHeight="400" :isContentVisible="showContent">
+        <marker-component :contentWidth="400" :contentHeight="400" :isContentVisible="showContent" @click="toggleShowContent()">
             <template v-slot:icon>
                 <v-icon style="width: 100%; height: 100%" color="white">
                     mdi-message-text
@@ -12,14 +12,14 @@
                 />
             </template>
         </marker-component>
-        <v-btn @click="toggleShowContent()"/>
+        <v-btn/>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import MarkerComponent from "@/components/MarkerComponent.vue";
+import MarkerComponent from "@/components/ContentMarkerComponent.vue";
 
 @Options({
     components: {
