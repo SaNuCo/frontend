@@ -2,9 +2,29 @@
     <div class="component">
         <div class="map" ref="mapContainer" />
         <div v-if="isLoaded">
-            <div v-for="coordinate, idx in coordinates" :key="idx">
-                <MarkerComponent :lngLat="coordinate" :map="map" anchor="bottom">
-                    <TestComponent></TestComponent>
+            <div v-for="marker, idx in markers" :key="idx">
+                <MarkerComponent :lngLat="marker.coordinates" :map="map" anchor="bottom" :zIndex="marker.isContentVisible ? 0 : 1">
+                    <ContentMarkerComponent
+                        :contentWidth="200" 
+                        :contentHeight="200 * 9 / 16" 
+                        :isContentVisible="marker.isContentVisible" 
+                        @click="marker.isContentVisible = !marker.isContentVisible" 
+                        style="width: 200px;" 
+                        markerFill="blue" 
+                        markerStroke="darkblue" 
+                        :identifier="(Math.random() + 1).toString(36).substring(7)"
+                    >
+                        <template v-slot:icon>
+                            <v-icon style="width: 100%; height: 100%" color="white">
+                                mdi-message-text
+                            </v-icon>
+                        </template>
+                        <template v-slot:content>
+                            <img
+                                :src="marker.img" style="width: 100%"
+                            />
+                        </template>
+                    </ContentMarkerComponent>
                 </MarkerComponent>
             </div>
         </div>
@@ -15,13 +35,14 @@
 import { Options, Vue } from "vue-class-component";
 import { Prop, Provide, ProvideReactive } from "vue-property-decorator";
 import { Map } from "maplibre-gl";
-import TestComponent from './TestComponent.vue';
+//@ts-ignore
 import MarkerComponent from './MarkerComponent.vue';
+import ContentMarkerComponent from "./ContentMarkerComponent.vue";
 
 @Options({
     components: {
-        TestComponent,
-        MarkerComponent
+        MarkerComponent,
+        ContentMarkerComponent
     }
 })
 export default class MapComponent extends Vue {
@@ -33,15 +54,7 @@ export default class MapComponent extends Vue {
 
     isLoaded = false
 
-    get coordinates(): any {
-        const res: [number, number][] = []
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                res.push([9.174886529310387 + i, 48.772661078848294 + j])
-            }
-        }
-        return res
-    }
+    markers: any[] = []
 
     async mounted() {
         this.map = new Map({
@@ -56,6 +69,15 @@ export default class MapComponent extends Vue {
         });
         this.isLoaded = true
 
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                this.markers.push({
+                    coordinates: [9.174886529310387 + i, 48.772661078848294 + j],
+                    isContentVisible: false,
+                    img: "https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg"
+                })
+            }
+        }
     }
 }
 </script>
@@ -77,6 +99,5 @@ export default class MapComponent extends Vue {
 <style>
 .maplibregl-marker {
     pointer-events: none;
-    z-index: 1;
 }
 </style>

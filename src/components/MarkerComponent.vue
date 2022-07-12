@@ -14,6 +14,10 @@
         type: Map,
         required: true
     },
+    zIndex: {
+        type: Number,
+        default: 0
+    },
     lngLat: {
       type: Array,
       required: true,
@@ -60,7 +64,7 @@
 </script>
 
 <script setup>
-  import { computed, ref, onMounted, onUnmounted, useSlots } from 'vue';
+  import { computed, ref, onMounted, onUnmounted, useSlots, watch } from 'vue';
   import { useMap, useEventsBinding, usePropsBinding } from './composables';
   const props = defineProps(propsConfig);
   const emit = defineEmits();
@@ -85,5 +89,8 @@
     if (marker.value) {
       marker.value.remove();
     }
+  });
+  watch(() => props.zIndex, (oldValue, newValue) => {
+    contentRef.value.style.setProperty("z-index", newValue);
   });
 </script>
