@@ -5,11 +5,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import MapComponent from "@/components/MapComponent.vue";
+import MapComponent from "@/components/map/MapComponent.vue";
 
 @Options({
     components: {
-        MapComponent: MapComponent,
+        MapComponent,
     },
 })
 export default class MapView extends Vue {}

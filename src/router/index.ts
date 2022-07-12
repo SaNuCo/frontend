@@ -1,16 +1,21 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import MapView from '../views/MapView.vue'
-import TestView from '../views/TestView.vue'
+import HomeView from '../views/HomeView.vue'
+import DiscoverView from '../views/DiscoverView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'map',
+    path: "/",
+    name: "home",
+    component: HomeView
+  }, {
+    path: "/map",
+    name: "map",
     component: MapView
   }, {
-    path: "/test",
-    name: "test",
-    component: TestView
+    path: "/discover",
+    name: "discover",
+    component: DiscoverView
   }
 ]
 
