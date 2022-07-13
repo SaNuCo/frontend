@@ -3,28 +3,19 @@
         <div class="map" ref="mapContainer" />
         <div v-if="isLoaded">
             <div v-for="marker, idx in markers" :key="idx">
-                <MarkerComponent :lngLat="marker.coordinates" :map="map" anchor="bottom" :zIndex="marker.isContentVisible ? 0 : 1">
-                    <ContentMarkerComponent
-                        :contentWidth="200" 
-                        :contentHeight="200 * 9 / 16" 
-                        :isContentVisible="marker.isContentVisible" 
-                        @click="marker.isContentVisible = !marker.isContentVisible" 
-                        style="width: 200px;" 
-                        markerFill="blue" 
-                        markerStroke="darkblue" 
-                        :identifier="(Math.random() + 1).toString(36).substring(7)"
-                    >
-                        <template v-slot:icon>
-                            <v-icon style="width: 100%; height: 100%" color="white">
-                                mdi-message-text
-                            </v-icon>
-                        </template>
-                        <template v-slot:content>
-                            <img
-                                :src="marker.img" style="width: 100%"
-                            />
-                        </template>
-                    </ContentMarkerComponent>
+                <MarkerComponent :lngLat="marker.coordinates" :map="map"
+                    :zIndex="marker.isContentVisible ? 0 : 1" :contentWidth="200" :contentHeight="200 * 9 / 16"
+                    :isContentVisible="marker.isContentVisible"
+                    @click="marker.isContentVisible = !marker.isContentVisible" style="width: 200px;" markerFill="blue"
+                    markerStroke="darkblue" :identifier="(Math.random() + 1).toString(36).substring(7)">
+                    <template v-slot:icon>
+                        <v-icon style="width: 100%; height: 100%" color="white">
+                            mdi-message-text
+                        </v-icon>
+                    </template>
+                    <template v-slot:content>
+                        <img :src="marker.img" style="width: 100%" />
+                    </template>
                 </MarkerComponent>
             </div>
         </div>
@@ -35,21 +26,18 @@
 import { Options, Vue } from "vue-class-component";
 import { Prop, Provide, ProvideReactive } from "vue-property-decorator";
 import { Map } from "maplibre-gl";
-//@ts-ignore
 import MarkerComponent from './MarkerComponent.vue';
-import ContentMarkerComponent from "./ContentMarkerComponent.vue";
 
 @Options({
     components: {
         MarkerComponent,
-        ContentMarkerComponent
     }
 })
 export default class MapComponent extends Vue {
     declare $refs: {
         mapContainer: any
     }
-    
+
     map: Map | null = null;
 
     isLoaded = false
@@ -91,9 +79,9 @@ export default class MapComponent extends Vue {
 }
 
 .map {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 </style>
 <style>
