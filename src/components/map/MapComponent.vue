@@ -4,10 +4,10 @@
         <div v-if="isLoaded">
             <div v-for="marker, idx in markers" :key="idx">
                 <MarkerComponent :lngLat="marker.coordinates" :map="map"
-                    :zIndex="marker.isContentVisible ? 0 : 1" :contentWidth="200" :contentHeight="200 * 9 / 16"
+                    :zIndex="marker.isContentVisible ? 1 : 0" :contentWidth="200" :contentHeight="200 * 9 / 16"
                     :isContentVisible="marker.isContentVisible"
                     @click="marker.isContentVisible = !marker.isContentVisible" style="width: 200px;" markerFill="blue"
-                    markerStroke="darkblue" :identifier="(Math.random() + 1).toString(36).substring(7)">
+                    markerStroke="darkblue" :identifier="`${marker.coordinates[0]}-${marker.coordinates[1]}`">
                     <template v-slot:icon>
                         <v-icon style="width: 100%; height: 100%" color="white">
                             mdi-message-text

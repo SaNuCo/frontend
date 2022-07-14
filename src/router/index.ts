@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import MapView from '../views/MapView.vue'
-import HomeView from '../views/HomeView.vue'
-import DiscoverView from '../views/DiscoverView.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
+import MapView from "../views/MapView.vue"
+import HomeView from "../views/HomeView.vue"
+import DiscoverView from "../views/DiscoverView.vue"
+import ChatView from "../views/ChatView.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -16,6 +17,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/discover",
     name: "discover",
     component: DiscoverView
+  }, {
+    path: "/chat",
+    name: "chat",
+    component: ChatView
   }
 ]
 
