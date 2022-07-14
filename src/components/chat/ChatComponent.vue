@@ -10,10 +10,6 @@
         @edit-message="editMessage"
         @delete-message="deleteMessage"
         @open-file="openFile"
-        @open-user-tag="openUserTag"
-        @add-room="addRoom"
-        @room-action-handler="menuActionHandler"
-        @menu-action-handler="menuActionHandler"
         @message-selection-action-handler="messageSelectionActionHandler"
         @send-message-reaction="sendMessageReaction"
         @typing-message="typingMessage"
@@ -57,11 +53,36 @@ export default class ChatComponent extends Vue {
     messages = [];
     currentUserId = 1234;
 
-    fetchMessages(params: {room: any, options?: any}): void {
-        // TODO fetch messages and add to messages
+    fetchMessages(args: any): void {
+        // TODO
     }
 
+    sendMessage(args: any): void {
+        // TODO 
+    }
+
+    editMessage(args: any): void {
+        // TODO
+    }
+
+    deleteMessage(args: any): void {
+        // TODO
+    }
     
+    openFile(args: any): void {
+        // TODO
+    }
+
+    sendMessageReaction(args: any): void {
+        // TODO
+    }
+
+    messageSelectionActionHandler(args: any): void {
+        // TODO
+    }
+    typingMessage(args: any): void {
+        // TODO
+    }
 }
 </script>
 
