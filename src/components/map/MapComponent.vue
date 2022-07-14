@@ -47,7 +47,7 @@ export default class MapComponent extends Vue {
     async mounted() {
         this.map = new Map({
             container: this.$refs.mapContainer,
-            style: "/map/light/style.json",
+            style: "/mapstyles/light/style.json",
             center: [9.174886529310387, 48.772661078848294],
             zoom: 9,
             maxZoom: 16,
