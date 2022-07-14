@@ -3,20 +3,7 @@
         <div class="map" ref="mapContainer" />
         <div v-if="isLoaded">
             <div v-for="marker, idx in markers" :key="idx">
-                <MarkerComponent :lngLat="marker.coordinates" :map="map"
-                    :zIndex="marker.isContentVisible ? 1 : 0" :contentWidth="200" :contentHeight="200 * 9 / 16"
-                    :isContentVisible="marker.isContentVisible"
-                    @click="marker.isContentVisible = !marker.isContentVisible" style="width: 200px;" markerFill="blue"
-                    markerStroke="darkblue" :identifier="`${marker.coordinates[0]}-${marker.coordinates[1]}`">
-                    <template v-slot:icon>
-                        <v-icon style="width: 100%; height: 100%" color="white">
-                            mdi-message-text
-                        </v-icon>
-                    </template>
-                    <template v-slot:content>
-                        <img :src="marker.img" style="width: 100%" />
-                    </template>
-                </MarkerComponent>
+                <ContentMarkerComponent :map="map" :marker="marker" @markerClicked="updateMarker(marker)"></ContentMarkerComponent>
             </div>
         </div>
     </div>
@@ -24,13 +11,12 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Prop, Provide, ProvideReactive } from "vue-property-decorator";
 import { Map } from "maplibre-gl";
-import MarkerComponent from './MarkerComponent.vue';
+import ContentMarkerComponent from './ContentMarkerComponent.vue';
 
 @Options({
     components: {
-        MarkerComponent,
+        ContentMarkerComponent,
     }
 })
 export default class MapComponent extends Vue {
@@ -65,6 +51,14 @@ export default class MapComponent extends Vue {
                     img: "https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg"
                 })
             }
+        }
+    }
+
+    updateMarker(marker: any) {
+        if (marker.isContentVisible) {
+            marker.isContentVisible = false
+        } else {
+            marker.isContentVisible = true
         }
     }
 }

@@ -47,7 +47,6 @@ export default class DiscoverComponent extends Vue {
     }
 
     onSubmit(item: any) {
-        console.log(item)
         if (this.queue.length < 3) {
             this.mock();
         }
