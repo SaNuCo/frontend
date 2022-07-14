@@ -3,9 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
 
-loadFonts()
+//Fonts
+import "typeface-roboto/index.css";
+import "@mdi/font/css/materialdesignicons.css";
 
 createApp(App)
   .use(router)
