@@ -1,32 +1,41 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
-import MapView from "../views/MapView.vue"
-import HomeView from "../views/HomeView.vue"
-import DiscoverView from "../views/DiscoverView.vue"
-import ChatView from "../views/ChatView.vue"
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import MapView from "../views/MapView.vue";
+import HomeView from "../views/HomeView.vue";
+import DiscoverView from "../views/DiscoverView.vue";
+import ChatView from "../views/ChatView.vue";
+import AddOfferView from "../views/AddOfferView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
-    component: HomeView
-  }, {
+    component: HomeView,
+  },
+  {
     path: "/map",
     name: "map",
-    component: MapView
-  }, {
+    component: MapView,
+  },
+  {
     path: "/discover",
     name: "discover",
-    component: DiscoverView
-  }, {
+    component: DiscoverView,
+  },
+  {
     path: "/chat",
     name: "chat",
-    component: ChatView
-  }
-]
+    component: ChatView,
+  },
+  {
+    path: "/add",
+    name: "add",
+    component: AddOfferView,
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
