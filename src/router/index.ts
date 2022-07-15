@@ -3,6 +3,7 @@ import MapView from "../views/MapView.vue"
 import HomeView from "../views/HomeView.vue"
 import DiscoverView from "../views/DiscoverView.vue"
 import ChatView from "../views/ChatView.vue"
+import TestView from "../views/TestView.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -21,6 +22,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/chat",
     name: "chat",
     component: ChatView
+  }, {
+    path: "/test",
+    name: "test",
+    component: TestView
   }
 ]
 

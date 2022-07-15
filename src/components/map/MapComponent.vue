@@ -13,6 +13,9 @@
 import { Options, Vue } from "vue-class-component";
 import { Map } from "maplibre-gl";
 import ContentMarkerComponent from './ContentMarkerComponent.vue';
+import { useTheme } from "vuetify/lib/framework.mjs";
+import { Watch } from "vue-property-decorator";
+import { watch } from "vue";
 
 @Options({
     components: {
@@ -30,13 +33,33 @@ export default class MapComponent extends Vue {
 
     markers: any[] = []
 
+    theme!: any
+
+    created() {
+        this.theme = useTheme();
+
+        watch(this.theme.global.name.value, () => {
+            if (this.map) {
+                this.map.setStyle(this.stylePath);
+            }
+        })
+    }
+
+    get isDarkMode(): boolean {
+        return this.theme.global.name.value == "dark";
+    }
+
+    get stylePath(): string {
+        return this.isDarkMode ? "/mapstyles/dark/style.json" : "/mapstyles/light/style.json"
+    }
+
     async mounted() {
         this.map = new Map({
             container: this.$refs.mapContainer,
-            style: "/mapstyles/light/style.json",
+            style: this.stylePath,
             center: [9.174886529310387, 48.772661078848294],
             zoom: 9,
-            maxZoom: 16,
+            maxZoom: 20,
             transformRequest: (url: string) => ({
                 url: new URL(url, document.baseURI).toString()
             }),

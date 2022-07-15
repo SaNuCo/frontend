@@ -5,6 +5,7 @@
         :current-user-id="currentUserId"
         :single-room="true"
         height="100%"
+        :theme="isDarkMode ? 'dark' : 'light'"
         @fetch-messages="fetchMessages"
         @send-message="sendMessage"
         @edit-message="editMessage"
@@ -21,6 +22,7 @@
 import { Options, Vue } from "vue-class-component";
 import ChatWindow from "vue-advanced-chat";
 import "vue-advanced-chat/dist/vue-advanced-chat.css";
+import { useTheme } from "vuetify/lib/framework.mjs";
 
 @Options({
     components: {
@@ -52,6 +54,16 @@ export default class ChatComponent extends Vue {
     }];
     messages = [];
     currentUserId = 1234;
+
+    theme!: any
+
+    created() {
+        this.theme = useTheme();
+    }
+
+    get isDarkMode(): boolean {
+        return this.theme?.global?.name?.value == "dark";
+    }
 
     fetchMessages(args: any): void {
         // TODO

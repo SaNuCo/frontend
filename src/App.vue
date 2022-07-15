@@ -23,10 +23,19 @@
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import debounce from "lodash/debounce"
+import { useTheme } from 'vuetify/lib/framework.mjs';
 
 @Options({})
 export default class App extends Vue {
     route = "home"
+
+    created() {
+        const theme = useTheme();
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme && (theme.global.name.value == "light" || theme.global.name.value == "dark")) {
+            theme.global.name.value = savedTheme;
+        }
+    }
 
     setViewHeight() {
         const vh = window.innerHeight * 0.01
