@@ -1,6 +1,6 @@
 <template>
     <div class="component">
-        <div class="map" ref="mapContainer" />
+        <div class="map" ref="mapContainer"/>
         <div v-if="isLoaded">
             <div v-for="marker, idx in markers" :key="idx">
                 <ContentMarkerComponent :map="map" :marker="marker" @markerClicked="updateMarker(marker)"></ContentMarkerComponent>
@@ -14,7 +14,6 @@ import { Options, Vue } from "vue-class-component";
 import { Map } from "maplibre-gl";
 import ContentMarkerComponent from './ContentMarkerComponent.vue';
 import { useTheme } from "vuetify/lib/framework.mjs";
-import { Watch } from "vue-property-decorator";
 import { watch } from "vue";
 
 @Options({
@@ -34,6 +33,8 @@ export default class MapComponent extends Vue {
     markers: any[] = []
 
     theme!: any
+
+    expandedMarker: any | null = null;
 
     created() {
         this.theme = useTheme();
@@ -63,7 +64,7 @@ export default class MapComponent extends Vue {
             transformRequest: (url: string) => ({
                 url: new URL(url, document.baseURI).toString()
             }),
-        });
+        }).on("mousedown", this.mapClicked);
         this.isLoaded = true
 
         for (let i = 0; i < 10; i++) {
@@ -78,10 +79,21 @@ export default class MapComponent extends Vue {
     }
 
     updateMarker(marker: any) {
-        if (marker.isContentVisible) {
-            marker.isContentVisible = false
+        if (marker == this.expandedMarker) {
+             // TODO
         } else {
+            if (this.expandedMarker) {
+                this.expandedMarker.isContentVisible = false;
+            }
             marker.isContentVisible = true
+            this.expandedMarker = marker;
+        }
+    }
+
+    mapClicked(args: any) {
+        if (this.expandedMarker && !args.originalEvent.defaultPrevented) {
+            this.expandedMarker.isContentVisible = false;
+            this.expandedMarker = null;
         }
     }
 }
