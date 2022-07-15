@@ -2,7 +2,7 @@
     <Tinder ref="tinder" key-name="id" v-model:queue="queue" :offset-y="10" @submit="onSubmit" :allowSuper="false"
         :allowDown="false">
         <template v-slot="scope">
-            <div class="pa-3 card-wrapper">
+            <v-card class="pa-3 card-wrapper" elevation="24" rounded="xl">
                 <div class="discover-card">
                     <div class="text-center text-h6">
                         {{ scope.data.title }}
@@ -12,7 +12,7 @@
                         {{ scope.data.content }}
                     </div>
                 </div>
-            </div>
+            </v-card>
         </template>
         <template v-slot:like>
             <v-icon class="like-pointer" size="x-large" color="success">mdi-thumb-up</v-icon>
@@ -22,6 +22,7 @@
         </template>
     </Tinder>
     <div class="buttons">
+        <v-btn size="x-large" icon="mdi-undo" class="ma-5" color="warning" @click="undo()"/>
         <v-btn size="x-large" icon="mdi-thumb-down" class="ma-5" color="error" @click="$refs.tinder.decide('nope')" />
         <v-btn size="x-large" icon="mdi-thumb-up" class="ma-5" color="success" @click="$refs.tinder.decide('like')" />
     </div>
@@ -46,6 +47,7 @@ export default class DiscoverComponent extends Vue {
     }
 
     queue: any[] = [];
+    history: any[] = [];
     offset = 0;
 
     created() {
@@ -56,13 +58,20 @@ export default class DiscoverComponent extends Vue {
         if (this.queue.length < 3) {
             this.mock();
         }
-        //this.history.push(item);
+        this.history.push(item.item);
+    }
+
+    undo() {
+        if (this.history.length) {
+            this.$refs.tinder.rewind([this.history.pop()]);
+        }
     }
 
     mock(count = 5, append = true) {
         const list = [];
         for (let i = 0; i < count; i++) {
             list.push({
+                id: source[this.offset],
                 title: "Hello darkness my old friend",
                 image: `https://bing.com//th?id=OHR.${source[this.offset]}_UHD.jpg&pid=hp&w=720&h=1280&rs=1&c=4&r=0`,
                 content: loremIpsum
@@ -138,5 +147,13 @@ body {
     justify-content: center;
     align-items: end;
     height: 100%
+}
+
+</style>
+<style>
+.tinder-card {
+    background: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
 }
 </style>

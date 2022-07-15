@@ -4,6 +4,7 @@ import HomeView from "../views/HomeView.vue"
 import DiscoverView from "../views/DiscoverView.vue"
 import ChatView from "../views/ChatView.vue"
 import TestView from "../views/TestView.vue"
+import SettingsView from "../views/SettingsView.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -26,6 +27,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/test",
     name: "test",
     component: TestView
+  }, {
+    path: "/settings",
+    name: "settings",
+    component: SettingsView
   }
 ]
 

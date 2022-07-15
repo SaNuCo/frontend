@@ -25,10 +25,5 @@ export default class Test extends Vue {
     }
 }
 </script>
-<script>
-
-</script>
-
-
-<style>
+<style scoped>
 </style>
