@@ -1,4 +1,4 @@
-# foodinder
+# SaNuCo
 
 ## Project setup
 ```
