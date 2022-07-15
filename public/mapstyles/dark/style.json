@@ -5,7 +5,7 @@
     "openmaptiles": {
       "type": "vector",
       "tiles": [
-        "/tiles/{z}/{x}/{y}.pbf"
+        "https://hackathon.sqa-kube-cluster4.cloudns.nz/tiles/{z}/{x}/{y}.pbf"
       ]
     }
   },
