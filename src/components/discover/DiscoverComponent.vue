@@ -50,7 +50,7 @@ export default class DiscoverComponent extends Vue {
     queue: any[] = [];
     history: any[] = [];
     offset = 0;
-    endcursor: String | null = null
+    endcursor: string | null = null
 
     created() {
         this.mock();
@@ -90,38 +90,22 @@ export default class DiscoverComponent extends Vue {
     getMoreData(count = 20) {
         const lastId = this.queue[this.queue.length - 1]?.id
         const resut = this.$apollo.query({
-            query: gql`query ($self: String!, $after: String, $first: Int!) {
-                foodOfferings(after:$after, first: $first, filter: {
-                    offeredBy: {
-                    not: {
-                        username: {
-                        eq: $self
-                        }
+            query: gql`query ($location: [Float!]!, $after: ID, $count: Int!) {
+                foodOfferingsNear(after:$after, count: $count) {
+                    pageInfo {
+                        endCursor
                     }
+                    nodes {
+                        id
+                        title
+                        picture
+                        category
+                        description
                     }
-                    reactions: {
-                    none: {
-                        user: {
-                        username: {
-                            eq: $self
-                        }
-                        }
-                    }
-                    }
-                }) {
-                pageInfo {
-                endCursor
                 }
-                nodes {
-                id
-                title
-                picture
-                category
-                description
-                }
-            }
             }`
         })
+        console.log
     }
 }
 

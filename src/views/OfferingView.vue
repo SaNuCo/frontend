@@ -31,7 +31,7 @@ import gql from "graphql-tag";
 })
 export default class OfferingView extends Vue {
 
-    imageId = ""
+    imageId: string | null = null
     title = ""
     description = ""
     category = "share"
@@ -56,7 +56,7 @@ export default class OfferingView extends Vue {
     }
 
     deleteImage() {
-        this.imageId = ""
+        this.imageId = null
     }
 
     pickerUpdated(coordinates: [number, number]) {
@@ -77,12 +77,13 @@ export default class OfferingView extends Vue {
                         title: this.title,
                         picture: this.imageId,
                         location: this.location,
-                        category: this.category
+                        category: this.category,
+                        description: this.description
                     }
                 }
             })
         } else {
-
+            //TODO
         }
 
         this.$router.back()
