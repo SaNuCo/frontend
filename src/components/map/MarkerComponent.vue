@@ -1,7 +1,7 @@
 <template>
     <div>
         <div ref="contentRef">
-            <div class="component" @click="$emit('click')">
+            <div class="component" @click.prevent="$emit('markerClicked')">
                 <svg :viewBox="calculateViewBox()" xmlns="http://www.w3.org/2000/svg" ref="marker">
                     <defs>
                         <mask :id="`my-mask-${identifier}`" class="content-mask" maskUnits="userSpaceOnUse"
@@ -38,6 +38,14 @@
                             'icon-invisible': isContentVisible
                         }" :style="`transition-duration:${animationDuration}`">
                             <slot name="icon" />
+                        </foreignObject>
+                        <foreignObject :x="-contentWidth / 2" :y="-80" :width="contentWidth" height="20" class="label-foreign-element" :class="{
+                            'icon-visible': !isContentVisible,
+                            'icon-invisible': isContentVisible
+                        }" :style="`transition-duration:${animationDuration}`">
+                            <div class="text-center text-subtitle-1">
+                                Test df gs dg asd f adsf gsf gh fsdg sdf g dsf g sdf gfs dg fs gs fdg sdf g dfsg dfs g dfsg dfsg sdf g dfsg dsf gd s gdfs 
+                            </div>
                         </foreignObject>
                     </g>
                 </svg>
@@ -94,15 +102,20 @@ export default class MarkerComponent extends Vue {
 
     mounted() {
         if (this.isContentVisible) {
-            this.initialPath = this.calculatePath(this.contentWidth, this.contentHeight)
+            this.initialPath = this.calculatePath(this.contentWidth, this.contentHeight);
         } else {
-            this.initialPath = this.calculatePath(0, 0)
+            this.initialPath = this.calculatePath(0, 0);
         }
         const options: MarkerOptions = {
             anchor: "bottom",
             element: this.$refs.contentRef
         }
         this.marker = new Marker(options).setLngLat(this.lngLat).addTo(this.map);
+    }
+
+    @Watch("lngLat")
+    lngLatChanged() {
+        this.marker.setLngLat(this.lngLat);
     }
 
     unmounted() {

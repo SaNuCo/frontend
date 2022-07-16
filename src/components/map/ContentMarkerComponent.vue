@@ -1,5 +1,5 @@
 <template>
-    <MarkerComponent @click="$emit('markerClicked')" :lngLat="marker.coordinates" :map="map" ref="markerComponents" :zIndex="marker.isContentVisible ? 1 : 0"
+    <MarkerComponent @markerClicked="$emit('markerClicked')" :lngLat="marker.coordinates" :map="map" ref="markerComponents" :zIndex="marker.isContentVisible ? 1 : 0"
         :contentWidth="200" :contentHeight="200 * 9 / 16" :isContentVisible="marker.isContentVisible"
         style="width: 200px;" markerFill="blue" markerStroke="darkblue"
         :identifier="`${marker.coordinates[0]}-${marker.coordinates[1]}`">
