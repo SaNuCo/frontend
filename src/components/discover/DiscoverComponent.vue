@@ -34,6 +34,7 @@ import { Options, Vue } from "vue-class-component";
 import Tinder from "vue-tinder";
 import source from "./bing"
 import "vue-tinder/lib/style.css"
+import gql from "graphql-tag";
 
 @Options({
     components: {
@@ -49,6 +50,7 @@ export default class DiscoverComponent extends Vue {
     queue: any[] = [];
     history: any[] = [];
     offset = 0;
+    endcursor: String | null = null
 
     created() {
         this.mock();
@@ -83,6 +85,43 @@ export default class DiscoverComponent extends Vue {
         } else {
             this.queue.unshift(...list);
         }
+    }
+
+    getMoreData(count = 20) {
+        const lastId = this.queue[this.queue.length - 1]?.id
+        const resut = this.$apollo.query({
+            query: gql`query ($self: String!, $after: String, $first: Int!) {
+                foodOfferings(after:$after, first: $first, filter: {
+                    offeredBy: {
+                    not: {
+                        username: {
+                        eq: $self
+                        }
+                    }
+                    }
+                    reactions: {
+                    none: {
+                        user: {
+                        username: {
+                            eq: $self
+                        }
+                        }
+                    }
+                    }
+                }) {
+                pageInfo {
+                endCursor
+                }
+                nodes {
+                id
+                title
+                picture
+                category
+                description
+                }
+            }
+            }`
+        })
     }
 }
 
