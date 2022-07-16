@@ -1,7 +1,7 @@
 <template>
-  <div class="profile__container">
-    <ProfileAvatar class="profile__image" username="Test User"></ProfileAvatar>
-    <span class="profile__description">Name des Users</span>
+  <div class="profile__container" @click="editProfile()">
+    <ProfileAvatar class="profile__image" :username="username"></ProfileAvatar>
+    <span class="profile__description">{{ username }}</span>
     <span class="profile__description">Kurze Beschreibung des Users</span>
     <span class="profile__description">Erfahrung des Users</span>
   </div>
@@ -16,7 +16,16 @@ import ProfileAvatar from "vue-profile-avatar";
     ProfileAvatar,
   },
 })
-export default class ProfileComponent extends Vue {}
+export default class ProfileComponent extends Vue {
+  username = localStorage.getItem("username");
+
+  /**
+   * This method routes to the page where profile data can be edited
+   */
+  editProfile() {
+    this.$router.push("/profile");
+  }
+}
 </script>
 
 <style lang="scss" scoped>

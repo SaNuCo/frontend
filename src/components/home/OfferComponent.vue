@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Button to add a new offer -->
-    <v-btn value="add" to="/add">
+    <v-btn value="offering" to="/offering">
       <span>Add Offer</span>
       <v-icon>mdi-plus</v-icon>
     </v-btn>
