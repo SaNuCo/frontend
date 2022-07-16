@@ -71,9 +71,7 @@ export default class OfferComponent extends Vue {
         }
       `,
       variables: {
-        input: {
-          username: "pia",
-        },
+        username: "pia",
       },
     });
     console.log("existingOffers", existingOffers);
