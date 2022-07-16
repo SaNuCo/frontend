@@ -50,32 +50,6 @@ export default class OfferComponent extends Vue {
       description: "Biete Tomaten",
     },
   ];
-
-  created() {
-    this.fetchExistingOffers();
-  }
-
-  async fetchExistingOffers() {
-    const existingOffers = await this.$apollo.query({
-      query: gql`
-        query ($username: String!) {
-          foodOfferings(filter: { user: { username: { eq: $username } } }) {
-            nodes {
-              id
-              title
-              picture
-              category
-              description
-            }
-          }
-        }
-      `,
-      variables: {
-        username: "pia",
-      },
-    });
-    console.log("existingOffers", existingOffers);
-  }
 }
 </script>
 
