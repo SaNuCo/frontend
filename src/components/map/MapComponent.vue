@@ -98,7 +98,7 @@ export default class MapComponent extends Vue {
             for (const marker of markers) {
                 this.markers.push({
                     coordinates: marker.location,
-                    isContentVisible: false.valueOf,
+                    isContentVisible: false,
                     title: marker.title,
                     img: marker.picture
                 })
