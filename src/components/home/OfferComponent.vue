@@ -72,7 +72,7 @@ export default class OfferComponent extends Vue {
       `,
       variables: {
         input: {
-          title: "pia",
+          username: "pia",
         },
       },
     });
