@@ -6,7 +6,7 @@ import ChatView from "../views/ChatView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import LoginView from "../views/LoginView.vue";
 import OfferingView from "../views/OfferingView.vue";
-import AddOfferView from "../view/AddOfferView.vue";
+import AddOfferView from "../views/AddOfferView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {

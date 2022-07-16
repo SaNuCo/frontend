@@ -89,7 +89,7 @@ export default class DiscoverComponent extends Vue {
 
     getMoreData(count = 20) {
         const lastId = this.queue[this.queue.length - 1]?.id
-        const resut = this.$apollo.query({
+        const result = this.$apollo.query({
             query: gql`query ($location: [Float!]!, $after: ID, $count: Int!) {
                 foodOfferingsNear(after:$after, count: $count) {
                     pageInfo {
@@ -105,7 +105,7 @@ export default class DiscoverComponent extends Vue {
                 }
             }`
         })
-        console.log
+        console.log(result)
     }
 }
 
