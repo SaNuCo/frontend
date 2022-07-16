@@ -70,7 +70,6 @@ export default class DiscoverComponent extends Vue {
 
     async getMoreData(count = 20) {
         const lastId = this.queue[this.queue.length - 1]?.id ?? null
-        console.log(lastId)
         const result = await this.$apollo.query({
             query: gql`query ($location: [Float!]!, $after: ID, $count: Int!) {
                 foodOfferingsNear(after:$after, count: $count, location: $location) {
@@ -83,7 +82,7 @@ export default class DiscoverComponent extends Vue {
                 }
             }`,
             variables: {
-                location: [10, 10],
+                location: [9.174886529310387, 48.772661078848294],
                 after: lastId,
                 count: count
             }

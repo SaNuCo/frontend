@@ -44,7 +44,7 @@
                             'icon-invisible': isContentVisible
                         }" :style="`transition-duration:${animationDuration}`">
                             <div class="text-center text-subtitle-1">
-                                Test df gs dg asd f adsf gsf gh fsdg sdf g dsf g sdf gfs dg fs gs fdg sdf g dfsg dfs g dfsg dfsg sdf g dfsg dsf gd s gdfs 
+                                {{ title }}
                             </div>
                         </foreignObject>
                     </g>
@@ -95,6 +95,9 @@ export default class MarkerComponent extends Vue {
 
     @Prop()
     lngLat!: [number, number]
+
+    @Prop()
+    title!: string
 
     initialPath = ""
 

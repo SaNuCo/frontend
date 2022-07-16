@@ -1,6 +1,6 @@
 <template>
     <MarkerComponent @markerClicked="$emit('markerClicked')" :lngLat="marker.coordinates" :map="map" ref="markerComponents" :zIndex="marker.isContentVisible ? 1 : 0"
-        :contentWidth="200" :contentHeight="200 * 9 / 16" :isContentVisible="marker.isContentVisible"
+        :contentWidth="200" :contentHeight="200 * 9 / 16" :isContentVisible="marker.isContentVisible" :title="marker.title"
         style="width: 200px;" markerFill="blue" markerStroke="darkblue"
         :identifier="`${marker.coordinates[0]}-${marker.coordinates[1]}`">
         <template v-slot:icon>
@@ -9,7 +9,7 @@
             </v-icon>
         </template>
         <template v-slot:content>
-            <img :src="marker.img" style="width: 100%" />
+            <img :src="`/files/${marker.img}`" style="width: 100%" v-if="marker.img" />
         </template>
     </MarkerComponent>
 </template>

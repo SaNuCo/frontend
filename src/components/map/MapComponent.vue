@@ -17,6 +17,7 @@ import ContentMarkerComponent from './ContentMarkerComponent.vue';
 import { useTheme } from "vuetify/lib/framework.mjs";
 import { watch } from "vue";
 import { Prop, Watch } from "vue-property-decorator";
+import gql from "graphql-tag";
 
 @Options({
     components: {
@@ -70,24 +71,39 @@ export default class MapComponent extends Vue {
         }).on("mousedown", this.mapClicked);
         this.isLoaded = true
 
-        if (this.pickerMode && this.pickerCoordinates) {
-            this.markers.push({
-                coordinates: this.pickerCoordinates ?? location,
-                isContentVisible: false
-            })
-        }
-
-        /*
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
+        if (this.pickerMode) {
+            if (this.pickerCoordinates) {
                 this.markers.push({
-                    coordinates: [9.174886529310387 + i, 48.772661078848294 + j],
-                    isContentVisible: false,
-                    img: "https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg"
+                    coordinates: this.pickerCoordinates ?? location,
+                    isContentVisible: false
+                })
+            }
+        } else {
+            const data = await this.$apollo.query({
+                query: gql`
+                    query {
+                        foodOfferings {
+                            nodes {
+                                id
+                                title
+                                description
+                                picture
+                                location
+                            }
+                        }
+                    }
+                `
+            })
+            const markers = data.data.foodOfferings.nodes
+            for (const marker of markers) {
+                this.markers.push({
+                    coordinates: marker.location,
+                    isContentVisible: false.valueOf,
+                    title: marker.title,
+                    img: marker.picture
                 })
             }
         }
-        */
     }
 
     @Watch("pickerCoordinates")
@@ -104,7 +120,7 @@ export default class MapComponent extends Vue {
 
     updateMarker(marker: any) {
         if (this.pickerMode) {
-
+            // nothing
         } else {
             if (marker == this.expandedMarker) {
                 // TODO
