@@ -7,9 +7,9 @@
                     <div class="text-center text-h6">
                         {{ scope.data.title }}
                     </div>
-                    <img v-if="scope.data.image" :src="scope.data.image" class="card-img my-3" />
+                    <img v-if="scope.data.picture" :src="`/files/${scope.data.picture}`" class="card-img my-3" />
                     <div>
-                        {{ scope.data.content }}
+                        {{ scope.data.description }}
                     </div>
                 </div>
             </v-card>
@@ -32,7 +32,6 @@
 import { Options, Vue } from "vue-class-component";
 // @ts-ignore
 import Tinder from "vue-tinder";
-import source from "./bing"
 import "vue-tinder/lib/style.css"
 import gql from "graphql-tag";
 
@@ -49,16 +48,16 @@ export default class DiscoverComponent extends Vue {
 
     queue: any[] = [];
     history: any[] = [];
-    offset = 0;
     endcursor: string | null = null
 
     created() {
-        this.mock();
+        this.getMoreData()
     }
 
     onSubmit(item: any) {
+        const decision = item.type
         if (this.queue.length < 3) {
-            this.mock();
+            this.getMoreData();
         }
         this.history.push(item.item);
     }
@@ -69,47 +68,31 @@ export default class DiscoverComponent extends Vue {
         }
     }
 
-    mock(count = 5, append = true) {
-        const list = [];
-        for (let i = 0; i < count; i++) {
-            list.push({
-                id: source[this.offset],
-                title: "Hello darkness my old friend",
-                image: `https://bing.com//th?id=OHR.${source[this.offset]}_UHD.jpg&pid=hp&w=720&h=1280&rs=1&c=4&r=0`,
-                content: loremIpsum
-            });
-            this.offset++;
-        }
-        if (append) {
-            this.queue = this.queue.concat(list);
-        } else {
-            this.queue.unshift(...list);
-        }
-    }
-
-    getMoreData(count = 20) {
-        const lastId = this.queue[this.queue.length - 1]?.id
-        const result = this.$apollo.query({
+    async getMoreData(count = 20) {
+        const lastId = this.queue[this.queue.length - 1]?.id ?? null
+        console.log(lastId)
+        const result = await this.$apollo.query({
             query: gql`query ($location: [Float!]!, $after: ID, $count: Int!) {
-                foodOfferingsNear(after:$after, count: $count) {
-                    pageInfo {
-                        endCursor
-                    }
-                    nodes {
-                        id
-                        title
-                        picture
-                        category
-                        description
-                    }
+                foodOfferingsNear(after:$after, count: $count, location: $location) {
+                    id
+                    title
+                    picture
+                    category
+                    description
+                    location
                 }
-            }`
+            }`,
+            variables: {
+                location: [10, 10],
+                after: lastId,
+                count: count
+            }
         })
-        console.log(result)
+        const offerings = result.data.foodOfferingsNear
+        this.queue = this.queue.concat(offerings)
     }
 }
 
-const loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 </script>
 
 <style scoped>
