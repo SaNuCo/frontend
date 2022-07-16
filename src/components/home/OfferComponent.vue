@@ -70,6 +70,11 @@ export default class OfferComponent extends Vue {
           }
         }
       `,
+      variables: {
+        input: {
+          title: "pia",
+        },
+      },
     });
     console.log("existingOffers", existingOffers);
   }
