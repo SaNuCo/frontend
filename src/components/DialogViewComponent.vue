@@ -37,5 +37,7 @@ export default class DialogViewComponent extends Vue {
 .main-content {
     flex-grow: 1;
     width: 100%;
+    overflow: auto;
+    height: 100%;
 }
 </style>

@@ -113,6 +113,11 @@ export default class MarkerComponent extends Vue {
         this.marker = new Marker(options).setLngLat(this.lngLat).addTo(this.map);
     }
 
+    @Watch("lngLat")
+    lngLatChanged() {
+        this.marker.setLngLat(this.lngLat);
+    }
+
     unmounted() {
         this.marker.remove();
     }

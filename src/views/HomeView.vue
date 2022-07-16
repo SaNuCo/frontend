@@ -1,5 +1,12 @@
 <template>
-    <div />
+    <div>
+        <v-btn to="/profile">
+            Profile
+        </v-btn>
+        <v-btn to="/offering">
+            Create Offering
+        </v-btn>
+    </div>
 </template>
 
 <script lang="ts">

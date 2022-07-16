@@ -1,208 +1,92 @@
 <template>
     <div>
-        <v-file-input
-            v-if="!imagePresent"
-            :label="Select image file"
-            v-model="file"
-            :disabled="disabled"
-            :loading="isUploading"
-            accept="image/png, image/jpeg, image/bmp, image/svg+xml"
-            prepend-icon="mdi-image"
-            :rules="[fileSizeCheck, fileTypeCheck]"
-        />
-        <v-hover>
-            <template v-slot:default="{ hover }">
-                <v-card
-                    flat
-                    outlined
-                    v-if="imagePresent"
-                    class="pa-3 mt-3 mb-3"
-                >
-                    <v-img
-                        :src="imageUrl"
-                        :max-height="200"
-                        contain
-                    >
-                    </v-img>
-                    <v-fade-transition>
-                        <v-overlay
-                            v-show="hover"
-                            absolute
-                            class="mt-0 delete-overlay"
-                            opacity="0.7"
-                        >
-                            <v-btn text @click="removeImage" top left>
-                                <v-icon>mdi-close-outline</v-icon>
-                                Delete Image
-                            </v-btn>
-                        </v-overlay>
-                    </v-fade-transition>
-                </v-card>
-            </template>
-        </v-hover>
+        <div v-if="value" class="my-3 preview">
+            <v-img :src="`/files/${value}`"></v-img>
+            <v-btn icon="mdi-delete" class="delete-button ma-3" color="error" size="large" @click="deleteImage()"/>
+        </div>
+        <v-file-input v-else label="Select image file"
+            accept="image/png, image/jpeg, image/bmp, image/svg+xml" prepend-icon="mdi-image"
+            :rules="[fileSizeCheck, fileTypeCheck]" :multiple="false" v-model="file"/>
     </div>
 </template>
 
 <script lang="ts">
-import { httpEndpoint } from "@/plugins/vue-apollo";
 import gql from "graphql-tag";
 import { Vue, Options } from "vue-class-component";
 import { Prop, Watch } from "vue-property-decorator";
-import LocalizedStringEdit from "./LocalizedStringEdit.vue";
+import { getType } from "mime"
 
 @Options({
-    name: "ImageUpload",
-    apollo: {
-        image: {
-            query: gql`
-                query($id: ID!) {
-                    node(id: $id) {
-                        ... on Image {
-                            id
-                            altText {
-                                locale
-                                value
-                            }
-                        }
-                    }
-                }
-            `,
-            variables: function() {
-                return {
-                    id: this.value
-                };
-            },
-            update: function(res: { node: Image }) {
-                addGQLTranslations(res.node.id, "altText", res.node.altText);
-                return res.node;
-            },
-            skip: function() {
-                return !this.value || this.value == "new";
-            }
-        }
-    }
+
 })
 export default class ImageUpload extends Vue {
-    @Prop()
-    private value?: string;
+    @Prop({ default: "" })
+    value?: string;
 
-    @Prop({
-        default: false
-    })
-    disabled?: boolean;
-
-    image: Image | null = null;
-
-    uploadImgValid = false;
-
-    file?: File | null = null;
-
-    fileRemoved = false;
-
-    isUploading = false;
+    file: File[] = []
 
     /**
      * Random string which changes when new image is uploaded or image id change
      */
     private randomGetParam = "";
 
-    constructor() {
-        super();
+    created() {
         this.randomGetParam = Date.now().toString(10);
     }
 
-    @Watch("value")
-    private imgIdChanged() {
-        this.refetch();
-    }
-
-    private fileSizeCheck(val: File) {
+    fileSizeCheck(val: File[]) {
         return (
-            !val ||
-            val.size < 16777216 ||
+            !val || val.length == 0 ||
+            val[0].size < 16777216 ||
             "This image is too large!"
         );
     }
 
-    private fileTypeCheck(val: File) {
+    fileTypeCheck(val: File[]) {
         return (
-            !val ||
+            !val || val.length == 0 ||
             ["image/png", "image/jpeg", "image/bmp", "image/svg+xml"].includes(
-                val.type
+                val[0].type
             ) ||
             "This image file type is not supported"
         );
     }
 
-    public async refetch() {
-        if (this.value == null || this.value == "new") {
-            this.image = undefined;
-        } else {
-            await this.$apollo.queries.image.refetch();
-            this.randomGetParam = Date.now().toString(10);
-        }
-    }
-
-    public get hasFile(): boolean {
-        return !!this.file;
-    }
-
-    public reset() {
-        this.file = null;
-        this.fileRemoved = false;
-    }
-
-    private async removeImage() {
-        this.$emit("imageChanged");
-        if (this.value && this.value !== "new") {
-            this.fileRemoved = true;
-        }
-        this.file = null;
-    }
-
-    /**
-     * Saves the changes: uploads the image if there is a new one, deletes the image otherweise
-     */
-    public async save() {
-        if (this.file) {
-            await this.upload();
-        } else if (this.fileRemoved) {
-            await this.deleteImage();
-        }
-    }
-
     /**
      * Create or update the current modeled image with the uploaded image
      */
-    private async upload() {
-        // TODO
-    }
-
-    private async deleteImage() {
-        if (this.value != undefined) {
-            // TODO
-            this.randomGetParam = Date.now().toString(10);
-            this.$emit("input", "new");
+    async upload() {
+        if (this.file) {
+            const fromData = new FormData();
+            fromData.append("image", this.file[0], this.file[0].name);
+            fromData.append("type", getType(this.file[0].name) ?? "application/octet-stream")
+            const id = await (await fetch("/files", {
+                method: "put",
+                body: fromData
+            })).text();
+            this.$emit("imageChanged", id);
         }
-    }
-
-    private get imageUrl(): string | null {
-        if (this.file != null) {
-            return URL.createObjectURL(this.file);
-        } else if (this.value && this.value !== "new" && !this.fileRemoved) {
-            return `${httpEndpoint}internal/images/${this.value}?${this.randomGetParam}`;
-        } else {
-            return null;
-        }
-    }
-
-    private get imagePresent(): boolean {
-        return this.imageUrl != null;
     }
 
     @Watch("file")
     private fileChanged(newFile: File) {
-        this.$emit("imageChanged");
+        this.upload();        
+    }
+
+    deleteImage() {
+        this.$emit('deleteImage')
+        this.file = []
     }
 }
 </script>
+<style scoped>
+.delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.preview {
+    position: relative;
+    max-height: 50%;
+}
+</style>
